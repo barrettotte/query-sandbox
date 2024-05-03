@@ -1,12 +1,12 @@
-package com.github.barrettotte.querysandbox.service;
+package com.github.barrettotte.querysandbox.service.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("service")
-public class ServiceProperties {
+@ConfigurationProperties("service.test")
+public class TestServiceProperties {
 
     /**
-     * A message for the service.
+     * A test message not useful for anything.
      */
     private String message;
 

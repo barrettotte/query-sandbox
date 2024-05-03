@@ -8,15 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest("service.message=Hello")
-public class MetricServiceTest {
+@SpringBootTest("service.test.message=TEST!")
+public class TestServiceTest {
 
     @Autowired
-    private MetricService metricService;
+    private TestService testService;
 
     @Test
     public void contextLoads() {
-        assertThat(metricService.message()).isNotNull();
+        assertThat(testService.message()).isNotNull();
     }
 
     @SpringBootApplication
