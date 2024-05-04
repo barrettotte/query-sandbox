@@ -6,15 +6,11 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <groupId>com.github.barrettotte</groupId>
+        <artifactId>query-sandbox</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-
-    <properties>
-        <java.version>17</java.version>
-    </properties>
 
     <groupId>com.github.barrettotte</groupId>
     <artifactId>query-sandbox-api</artifactId>
@@ -27,11 +23,6 @@
             <groupId>com.github.barrettotte</groupId>
             <artifactId>query-sandbox-lib</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <dependency>
@@ -49,6 +40,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>10.11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>10.11.0</version>
         </dependency>
     </dependencies>
 

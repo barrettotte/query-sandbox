@@ -13,10 +13,6 @@ public class TestServiceImpl implements TestService {
     @Autowired
     private TestServiceProperties testServiceProperties;
 
-//    public TestServiceImpl(TestServiceProperties testServiceProperties) {
-//        this.testServiceProperties = testServiceProperties;
-//    }
-
     public String message() {
         return this.testServiceProperties.getMessage();
     }

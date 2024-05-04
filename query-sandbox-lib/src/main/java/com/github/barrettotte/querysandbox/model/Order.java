@@ -15,14 +15,15 @@ public class Order {
     private Category category;
     private Priority priority;
     private OrderType orderType;
+    private Boolean hidden;
     private List<String> assigneeIds = new ArrayList<>();
 
     public Order() {
         // nop
     }
 
-    public Order(String id, Instant created, Instant updated, String description, Status status,
-                 Category category, Priority priority, OrderType orderType, List<String> assigneeIds) {
+    public Order(String id, Instant created, Instant updated, String description, Status status, Category category,
+                 Priority priority, OrderType orderType, Boolean hidden, List<String> assigneeIds) {
         this.id = id;
         this.created = created;
         this.updated = updated;
@@ -31,6 +32,7 @@ public class Order {
         this.category = category;
         this.priority = priority;
         this.orderType = orderType;
+        this.hidden = hidden;
         this.assigneeIds = assigneeIds;
     }
 
@@ -98,6 +100,14 @@ public class Order {
         this.orderType = orderType;
     }
 
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
+
     public List<String> getAssigneeIds() {
         return assigneeIds;
     }
@@ -122,13 +132,14 @@ public class Order {
                 Objects.equals(category, other.category) &&
                 Objects.equals(priority, other.priority) &&
                 Objects.equals(orderType, other.orderType) &&
+                Objects.equals(hidden, other.hidden) &&
                 Objects.equals(assigneeIds, other.assigneeIds)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, created, updated, description, status, category, priority, orderType, assigneeIds);
+        return Objects.hash(id, created, updated, description, status, category, priority, orderType, hidden, assigneeIds);
     }
 
     @Override
@@ -142,6 +153,7 @@ public class Order {
                 "category=" + category + "," +
                 "priority=" + priority + "," +
                 "orderType=" + orderType + "," +
+                "hidden=" + hidden + "," +
                 "assigneeIds=" + assigneeIds +
                 "}";
     }

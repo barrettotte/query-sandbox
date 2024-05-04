@@ -1,6 +1,9 @@
 # query-sandbox
 
-A sandbox for gaining a better understanding of query optimization
+A sandbox for messing around with various queries.
+
+I made this to get rid of a bunch of "noise" when trying to optimize queries
+tangled up in complex business logic.
 
 ## Local Testing
 
