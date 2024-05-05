@@ -1,21 +1,48 @@
 package com.github.barrettotte.querysandbox.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
+    @Column(name = "id", nullable = false)
     private String id;
+
+    @Column(name = "created", nullable = false)
     private Instant created;
+
+    @Column(name = "updated", nullable = false)
     private Instant updated;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "status", nullable = false)
     private Status status;
+
+    @Column(name = "category", nullable = false)
     private Category category;
+
+    @Column(name = "priority", nullable = false)
     private Priority priority;
-    private OrderType orderType;
+
+    @Column(name = "type", nullable = false)
+    private OrderType type;
+
+    @Column(name = "hidden", nullable = false)
     private Boolean hidden;
+
+    @Column(name = "assignee_ids")
     private List<String> assigneeIds = new ArrayList<>();
 
     public Order() {
@@ -23,7 +50,7 @@ public class Order {
     }
 
     public Order(String id, Instant created, Instant updated, String description, Status status, Category category,
-                 Priority priority, OrderType orderType, Boolean hidden, List<String> assigneeIds) {
+                 Priority priority, OrderType type, Boolean hidden, List<String> assigneeIds) {
         this.id = id;
         this.created = created;
         this.updated = updated;
@@ -31,7 +58,7 @@ public class Order {
         this.status = status;
         this.category = category;
         this.priority = priority;
-        this.orderType = orderType;
+        this.type = type;
         this.hidden = hidden;
         this.assigneeIds = assigneeIds;
     }
@@ -92,12 +119,12 @@ public class Order {
         this.priority = priority;
     }
 
-    public OrderType getOrderType() {
-        return orderType;
+    public OrderType getType() {
+        return type;
     }
 
-    public void setOrderType(OrderType orderType) {
-        this.orderType = orderType;
+    public void setType(OrderType type) {
+        this.type = type;
     }
 
     public Boolean getHidden() {
@@ -131,7 +158,7 @@ public class Order {
                 Objects.equals(status, other.status) &&
                 Objects.equals(category, other.category) &&
                 Objects.equals(priority, other.priority) &&
-                Objects.equals(orderType, other.orderType) &&
+                Objects.equals(type, other.type) &&
                 Objects.equals(hidden, other.hidden) &&
                 Objects.equals(assigneeIds, other.assigneeIds)
         );
@@ -139,7 +166,7 @@ public class Order {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, created, updated, description, status, category, priority, orderType, hidden, assigneeIds);
+        return Objects.hash(id, created, updated, description, status, category, priority, type, hidden, assigneeIds);
     }
 
     @Override
@@ -152,7 +179,7 @@ public class Order {
                 "status=" + status + "," +
                 "category=" + category + "," +
                 "priority=" + priority + "," +
-                "orderType=" + orderType + "," +
+                "orderType=" + type + "," +
                 "hidden=" + hidden + "," +
                 "assigneeIds=" + assigneeIds +
                 "}";

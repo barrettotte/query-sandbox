@@ -1,0 +1,49 @@
+### Test order API CRUD operations
+
+@base=http://localhost:8080/api/order
+
+### Get all
+GET {{base}} HTTP/1.1
+
+### Get single
+GET {{base}}/393c187a-af83-493c-b024-3de746e0050e HTTP/1.1
+
+### Create
+POST {{base}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "description": "Test create order",
+    "status": "OPEN",
+    "category": "CAT_1",
+    "priority": "LOW",
+    "type": "BASIC"
+}
+
+### Update
+PUT {{base}}/6c9c8cb3-a304-42ec-950a-f9619751fa9b HTTP/1.1
+Content-Type: application/json
+
+{
+    "description": "Test update order"
+}
+
+### Delete
+DELETE {{base}}/6c9c8cb3-a304-42ec-950a-f9619751fa9b HTTP/1.1
+
+### Create with assignee IDs
+POST {{base}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "description": "Test create order",
+    "status": "OPEN",
+    "category": "CAT_1",
+    "priority": "LOW",
+    "type": "BASIC",
+    "assigneeIds": [
+        "assignee-1",
+        "assignee-2",
+        "assignee-3"
+    ]
+}

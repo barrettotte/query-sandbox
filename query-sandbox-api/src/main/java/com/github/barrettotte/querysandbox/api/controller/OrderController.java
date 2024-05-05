@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/order")
@@ -31,35 +32,33 @@ public class OrderController {
 
     @GetMapping(value = "", produces = "application/json")
     public ResponseEntity<List<Order>> getAll() {
-        // TODO: orderService.getAll();
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Order> getById(@PathVariable(value = "id") String id) {
-        // TODO: orderService.getById(id);
-        // TODO: 404 if not found
-        return new ResponseEntity<>(new Order(), HttpStatus.OK);
+        return orderService.getById(id).map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping(value = "", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Order> create(@RequestBody Order toCreate) {
-        // TODO: orderService.create(toCreate);
-        return new ResponseEntity<>(toCreate, HttpStatus.CREATED);
+        return new ResponseEntity<>(orderService.create(toCreate), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Order> update(@PathVariable(value = "id") String id, @RequestBody Order toUpdate) {
-        // TODO: Optional<Order> original = orderService.getById(id);
-        // TODO: 404 if not found
-        // TODO: orderService.update(original, toUpdate);
-        return new ResponseEntity<>(toUpdate, HttpStatus.OK);
+        return orderService.getById(id).map(order -> new ResponseEntity<>(orderService.update(order, toUpdate), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable(value = "id") String id) {
-        // TODO: 404 if not found
-        // TODO: orderService.deleteById(id);
+        if (orderService.getById(id).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        orderService.deleteById(id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

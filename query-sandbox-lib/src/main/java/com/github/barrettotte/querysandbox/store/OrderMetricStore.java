@@ -1,6 +1,6 @@
 package com.github.barrettotte.querysandbox.store;
 
-public interface MetricStore {
+public interface OrderMetricStore {
 
     // TODO: collect
 

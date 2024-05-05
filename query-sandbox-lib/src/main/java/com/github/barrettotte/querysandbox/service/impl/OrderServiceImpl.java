@@ -2,77 +2,58 @@ package com.github.barrettotte.querysandbox.service.impl;
 
 import com.github.barrettotte.querysandbox.model.Order;
 import com.github.barrettotte.querysandbox.service.OrderService;
+import com.github.barrettotte.querysandbox.store.OrderStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    @Autowired
+    private OrderStore orderStore;
+
     @Override
     public List<Order> getAll() {
-        LOGGER.debug("Fetching asteroids");
-        // TODO: store getAll
-        return List.of();
+        LOGGER.debug("Fetching orders");
+        return orderStore.getAll();
     }
 
     @Override
     public Optional<Order> getById(String id) {
-        LOGGER.debug("Fetching asteroid by ID {}", id);
-        // TODO: store getById
-        return Optional.empty();
+        LOGGER.debug("Fetching order by ID {}", id);
+        return orderStore.getById(id);
     }
 
     @Override
     public Order create(Order order) {
-        // set generated values that should not be accepted from user
-        order.setId(String.valueOf(UUID.randomUUID()));
-        order.setCreated(Instant.now());
-        order.setUpdated(order.getCreated());
-
-        LOGGER.debug("Creating asteroid {}", order);
-        // TODO: store create
-        return null;
+        LOGGER.debug("Creating order {}", order);
+        try {
+            return orderStore.create(order);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Order update(Order original, Order toUpdate) {
-        // TODO: store update
-        Order merged = merge(original, toUpdate);
-        LOGGER.debug("Updating asteroid => original={}, updated={}", original, merged);
-        return null;
+        LOGGER.debug("Updating order => original={}, updated={}", original, toUpdate);
+        try {
+            return orderStore.update(original, toUpdate);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void deleteById(String id) {
-        LOGGER.debug("Deleting asteroid by ID {}", id);
-        // TODO: store delete
-    }
-
-    /**
-     * Merge an update into an order
-     * @param original original order to update
-     * @param update order to merge into original order
-     * @return merged order
-     */
-    private Order merge(Order original, Order update) {
-        return new Order (
-                original.getId(),
-                original.getCreated(),
-                Instant.now(),
-                Optional.ofNullable(update.getDescription()).orElse(original.getDescription()),
-                Optional.ofNullable(update.getStatus()).orElse(original.getStatus()),
-                Optional.ofNullable(update.getCategory()).orElse(original.getCategory()),
-                Optional.ofNullable(update.getPriority()).orElse(original.getPriority()),
-                Optional.ofNullable(update.getOrderType()).orElse(original.getOrderType()),
-                Optional.ofNullable(update.getHidden()).orElse(original.getHidden()),
-                Optional.ofNullable(update.getAssigneeIds()).orElse(original.getAssigneeIds())
-        );
+        LOGGER.debug("Deleting order by ID {}", id);
+        orderStore.deleteById(id);
     }
 }

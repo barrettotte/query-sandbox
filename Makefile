@@ -4,7 +4,9 @@ DOCKER = sudo docker
 API = query-sandbox-api
 DB = query-sandbox-postgres
 
+API_CONTAINER = $(shell $(DOCKER) container ls | grep $(API) | head -c 12)
 POSTGRES_CONTAINER = $(shell $(DOCKER) container ls | grep $(DB) | head -c 12)
+
 POSTGRES_USER = postgres
 POSTGRES_DB = query_sandbox
 
@@ -33,4 +35,7 @@ compose-down:
 .PHONY: psql
 psql:
 	@echo "Connecting to $(DB) ($(POSTGRES_CONTAINER)) as $(POSTGRES_USER)..."
-	@$(DOCKER) exec -it $(POSTGRES_CONTAINER) psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+	$(DOCKER) exec -it $(POSTGRES_CONTAINER) psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+
+api-logs:
+	$(DOCKER) container logs $(API_CONTAINER)
