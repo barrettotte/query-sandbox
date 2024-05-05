@@ -5,7 +5,7 @@ COPY ../query-sandbox-lib /build/query-sandbox-lib
 COPY ../query-sandbox-api /build/query-sandbox-api
 
 WORKDIR /build/
-RUN mvn -pl query-sandbox-lib,query-sandbox-api clean install
+RUN mvn clean install -Papi -DskipTests
 
 FROM openjdk:17-jdk-alpine
 COPY --from=build /build/query-sandbox-api/target/query-sandbox-api-0.0.1-SNAPSHOT.jar api.jar

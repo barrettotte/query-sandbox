@@ -19,18 +19,18 @@ services:
       - postgres
     restart: unless-stopped
 
-  # TODO:
-  # metrics:
-  #   container_name: query-sandbox-metrics
-  #   build:
-  #     context: ./query-sandbox-metrics
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - /etc/timezone:/etc/timezone:ro
-  #     - /etc/localtime:/etc/localtime:ro
-  #   depends_on:
-  #     - postgres
-  #   restart: unless-stopped
+  metrics:
+    container_name: query-sandbox-metrics
+    build:
+      context: .
+      dockerfile: ./docker/metrics.Dockerfile
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - postgres
+      - api
+    restart: unless-stopped
 
   postgres:
     container_name: query-sandbox-postgres

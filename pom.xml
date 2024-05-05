@@ -19,11 +19,33 @@
         <java.version>17</java.version>
     </properties>
 
-    <modules>
-        <module>query-sandbox-api</module>
-        <module>query-sandbox-lib</module>
-        <!-- <module>query-sandbox-metrics</module> -->
-    </modules>
+    <profiles>
+        <profile>
+            <id>api</id>
+            <modules>
+                <module>query-sandbox-api</module>
+                <module>query-sandbox-lib</module>    
+            </modules>
+        </profile>
+        <profile>
+            <id>metrics</id>
+            <modules>
+                <module>query-sandbox-metrics</module>
+                <module>query-sandbox-lib</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>query-sandbox-api</module>
+                <module>query-sandbox-metrics</module>
+                <module>query-sandbox-lib</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <!-- TODO: move common dependencies here -->
 <!--    <dependencyManagement>-->
