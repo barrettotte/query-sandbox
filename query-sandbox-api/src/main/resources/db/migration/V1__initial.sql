@@ -17,9 +17,6 @@ create table orders (
 
 create index idx_orders_type on orders (type);
 
-insert into orders (description, status, category, priority, type)
-values ('Test Order', 'OPEN', 'CAT_1', 'LOW', 'BASIC');
-
 -- metrics
 
 create table order_metrics (

@@ -12,7 +12,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.github.barrettotte</groupId>
     <artifactId>query-sandbox-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>query-sandbox-api</name>

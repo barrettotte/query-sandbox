@@ -1,7 +1,6 @@
 package com.github.barrettotte.querysandbox.store.impl;
 
 import com.github.barrettotte.querysandbox.model.Order;
-import com.github.barrettotte.querysandbox.model.OrderBuilder;
 import com.github.barrettotte.querysandbox.model.OrderRowMapper;
 import com.github.barrettotte.querysandbox.store.OrderStore;
 import org.slf4j.Logger;
@@ -124,15 +123,15 @@ public class OrderStoreImpl implements OrderStore {
      * @return updated order
      */
     private Order mergeUpdatesWithOriginal(Order original, Order update) {
-        return OrderBuilder.create()
-                .withDescription(Optional.ofNullable(update.getDescription()).orElse(original.getDescription()))
-                .withStatus(Optional.ofNullable(update.getStatus()).orElse(original.getStatus()))
-                .withCategory(Optional.ofNullable(update.getCategory()).orElse(original.getCategory()))
-                .withPriority(Optional.ofNullable(update.getPriority()).orElse(original.getPriority()))
-                .withType(Optional.ofNullable(update.getType()).orElse(original.getType()))
-                .withHidden(Optional.ofNullable(update.getHidden()).orElse(original.getHidden()))
-                .withAssigneeIds(Optional.ofNullable(update.getAssigneeIds()).orElse(original.getAssigneeIds()))
-                .build();
+        Order merged = new Order();
+        merged.setDescription(Optional.ofNullable(update.getDescription()).orElse(original.getDescription()));
+        merged.setStatus(Optional.ofNullable(update.getStatus()).orElse(original.getStatus()));
+        merged.setCategory(Optional.ofNullable(update.getCategory()).orElse(original.getCategory()));
+        merged.setPriority(Optional.ofNullable(update.getPriority()).orElse(original.getPriority()));
+        merged.setType(Optional.ofNullable(update.getType()).orElse(original.getType()));
+        merged.setHidden(Optional.ofNullable(update.getHidden()).orElse(original.getHidden()));
+        merged.setAssigneeIds(Optional.ofNullable(update.getAssigneeIds()).orElse(original.getAssigneeIds()));
+        return merged;
     }
 
     /**
