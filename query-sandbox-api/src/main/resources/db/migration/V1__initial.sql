@@ -20,7 +20,7 @@ create index idx_orders_type on orders (type);
 -- metrics
 
 create table order_metrics (
-    order_id uuid not null,
+    order_id text not null,
     state_start timestamp without time zone default now(),
     state_end timestamp without time zone,
     status text not null,

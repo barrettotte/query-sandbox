@@ -34,6 +34,7 @@ compose-down:
 
 .PHONY: psql
 psql:
+	$(DOCKER) compose up postgres -d
 	@echo "Connecting to $(DB) ($(POSTGRES_CONTAINER)) as $(POSTGRES_USER)..."
 	$(DOCKER) exec -it $(POSTGRES_CONTAINER) psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
 

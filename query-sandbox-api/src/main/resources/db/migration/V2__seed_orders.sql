@@ -6,12 +6,12 @@ insert into orders (
   category, priority, type, hidden, assignee_ids
 )
 select gen_random_uuid() as id, 
-  now() - interval '14 days' as created, 
-  now() - interval '14 days' as updated,
+  '2024-05-02 12:00:00'::timestamp without time zone as created, 
+  '2024-05-02 12:00:00'::timestamp without time zone as updated,
   ('test basic order ' || x.i::text) as description, 
   'OPEN' as status, 
   'CAT_1' as category, 
-  'LOW' as priority, 
+  'LOW' as priority,
   'BASIC' as type, 
   false as hidden, 
   array[]::text[] as assignee_ids
@@ -23,16 +23,10 @@ insert into orders (
   category, priority, type, hidden, assignee_ids
 )
 select gen_random_uuid() as id, 
-  now() - interval '14 days' as created,
-  now() - interval '14 days' as updated,
+  '2024-05-02 12:00:00'::timestamp without time zone - (interval '1 month' * (((i - 1) % 5) + 1)) as created,
+  '2024-05-02 12:00:00'::timestamp without time zone - (interval '1 month' * (((i - 1) % 5) + 1)) as updated,
   ('rand order ' || x.i::text) as description,
-  case floor(random() * 5)
-    when 0 then 'OPEN'
-    when 1 then 'IN_PROGRESS'
-    when 2 then 'REVIEW'
-    when 3 then 'CANCELLED'
-    when 4 then 'CLOSED'
-  end as status,
+  'IN_PROGRESS' as status,
   'CAT_' || (floor(random() * 4)) as category,
   case floor(random() * 4)
     when 0 then 'LOW'
