@@ -28,18 +28,18 @@ where not exists (
 
 
 -- update a couple orders, then check above changed query
-select id, status from orders where status='OPEN' order by id limit 5;
+select id, status from orders where status='OPEN' order by id limit 5000;
 
 select order_id, state_start, state_end, status
 from order_metrics where order_id in (
-  select id from orders where status='OPEN' order by id limit 5
+  select id from orders where status='OPEN' order by id limit 5000
 );
 
 update orders set status='TEST_STATUS' where id in (
-  select id from orders where status='OPEN' order by id limit 5
+  select id from orders where status='OPEN' order by id limit 5000
 );
 
-select id, status from orders where status='TEST_STATUS' order by id limit 5;
+select id, status from orders where status='TEST_STATUS' order by id limit 5000;
 -- 5 entries need updating
 
 
@@ -74,7 +74,7 @@ with changed as (
   )
 )
 update order_metrics
-set state_end=now()
+set state_end='2024-05-07 12:00:00'::timestamp without time zone
 from changed
 where changed.id=order_metrics.order_id
   and order_metrics.state_end is null;
@@ -83,7 +83,7 @@ where changed.id=order_metrics.order_id
 -- orders that had their new state recorded and now need a new metrics row
 -- with a blank state_end
 with new_metrics as (
-  select now() as state_start, null as state_end, o.id, o.status,
+  select '2024-05-07 12:00:00'::timestamp without time zone as state_start, null as state_end, o.id, o.status,
     o.category, o.priority, o.type, o.hidden, o.assignee_ids
   from orders as o
   where not exists (
@@ -97,7 +97,7 @@ select count(*) from new_metrics;
 
 -- add a new state metric for order that just had its state change recorded
 with new_metrics as (
-  select now() as state_start, null as state_end, o.id, o.status,
+  select '2024-05-07 12:00:00'::timestamp without time zone as state_start, null as state_end, o.id, o.status,
     o.category, o.priority, o.type, o.hidden, o.assignee_ids
   from orders as o
   where not exists (
@@ -107,7 +107,7 @@ with new_metrics as (
   )
 )
 insert into order_metrics (order_id, state_start, state_end, status, category, priority, type, hidden, assignee_ids)
-select o.id, now() as state_start, null as state_end, o.status, 
+select o.id, '2024-05-07 12:00:00'::timestamp without time zone as state_start, null as state_end, o.status, 
   o.category, o.priority, o.type, o.hidden, o.assignee_ids
 from orders as o
 where not exists (
@@ -118,12 +118,18 @@ where not exists (
 
 
 -- check metrics for test rows
-select order_id, state_start, state_end, status
+select count(*), state_start, status
 from order_metrics
 where order_id in (
-  select id from orders where status='TEST_STATUS' order by id limit 5
+  select id from orders where status='TEST_STATUS' order by id limit 5000
 )
-order by state_start desc;
+group by state_start, status;
+/*
+ count |        state_start         |   status    
+-------+----------------------------+-------------
+  5000 | 2024-05-02 12:00:00        | OPEN
+  5000 | 2024-05-07 18:51:14.363238 | TEST_STATUS
+*/
 
 
 -- check metrics per date

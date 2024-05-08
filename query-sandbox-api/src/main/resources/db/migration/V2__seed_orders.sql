@@ -17,7 +17,7 @@ select gen_random_uuid() as id,
   array[]::text[] as assignee_ids
 from generate_series(1, 25000) as x(i);
 
--- insert 75000 random orders
+-- insert 250000 random orders
 insert into orders (
   id, created, updated, description, status, 
   category, priority, type, hidden, assignee_ids
@@ -41,4 +41,4 @@ select gen_random_uuid() as id,
   end as type,
   false as hidden, 
   array[]::text[] as assignee_ids
-from generate_series(1, 75000) as x(i);
+from generate_series(1, 250000) as x(i);

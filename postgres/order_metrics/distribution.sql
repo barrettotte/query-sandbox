@@ -6,16 +6,16 @@ from order_metrics
 group by state_start, state_end, status
 order by state_start;
 /*
-count |        state_start         |         state_end         |   status    
--------+----------------------------+---------------------------+-------------
- 15000 | 2023-12-02 12:00:00        |                           | IN_PROGRESS
- 15000 | 2024-01-02 12:00:00        |                           | IN_PROGRESS
- 15000 | 2024-02-02 12:00:00        |                           | IN_PROGRESS
- 15000 | 2024-03-02 12:00:00        |                           | IN_PROGRESS
- 15000 | 2024-04-02 12:00:00        |                           | IN_PROGRESS
-     5 | 2024-05-02 12:00:00        | 2024-05-06 18:27:56.25322 | OPEN
- 24995 | 2024-05-02 12:00:00        |                           | OPEN
-     5 | 2024-05-06 18:28:03.763419 |                           | TEST_STATUS
+ count |     state_start     |      state_end      |   status    
+-------+---------------------+---------------------+-------------
+ 50000 | 2023-12-02 12:00:00 |                     | IN_PROGRESS
+ 50000 | 2024-01-02 12:00:00 |                     | IN_PROGRESS
+ 50000 | 2024-02-02 12:00:00 |                     | IN_PROGRESS
+ 50000 | 2024-03-02 12:00:00 |                     | IN_PROGRESS
+ 50000 | 2024-04-02 12:00:00 |                     | IN_PROGRESS
+  5000 | 2024-05-02 12:00:00 | 2024-05-07 12:00:00 | OPEN
+ 20000 | 2024-05-02 12:00:00 |                     | OPEN
+  5000 | 2024-05-07 12:00:00 |                     | TEST_STATUS
 */
 
 
@@ -30,10 +30,10 @@ with dist as (
 )
 select count(*), status from dist group by status;
 /*
- count |   status    
--------+-------------
- 75000 | IN_PROGRESS
- 25000 | OPEN
+ count  |   status    
+--------+-------------
+ 250000 | IN_PROGRESS
+  25000 | OPEN
 */
 
 -- status distribution of current time
@@ -47,11 +47,9 @@ with dist as (
 )
 select count(*), status from dist group by status;
 /*
- count |   status    
--------+-------------
- 75000 | IN_PROGRESS
- 24995 | OPEN
-     5 | TEST_STATUS
+ 250000 | IN_PROGRESS
+  20000 | OPEN
+   5000 | TEST_STATUS
 */
 
 
@@ -66,7 +64,7 @@ with dist as (
 )
 select count(*), status from dist group by status;
 /*
- count |   status    
--------+-------------
- 30000 | IN_PROGRESS
+ count  |   status    
+--------+-------------
+ 100000 | IN_PROGRESS
 */

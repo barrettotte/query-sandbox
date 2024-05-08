@@ -18,10 +18,10 @@ order by state_start desc, order_id;
 -- calculate deltas, age, inactivity
 with
 params as (
-  select least(now(), '2024-05-07 00:00:00'::timestamp without time zone) as end_date
---   select least(now(), '2024-05-06 00:00:00'::timestamp without time zone) as end_date
---   select least(now(), '2024-05-02 12:30:00'::timestamp without time zone) as end_date
---   select least(now(), '2024-05-02 10:30:00'::timestamp without time zone) as end_date
+  select '2024-05-08 00:00:00'::timestamp without time zone as end_date
+  -- select '2024-05-07 00:00:00'::timestamp without time zone as end_date
+  -- select '2024-05-02 12:30:00'::timestamp without time zone as end_date
+  -- select '2024-05-02 10:30:00'::timestamp without time zone as end_date
 ),
 metrics as (
   select order_id, state_start, state_end, status, category, priority, 
