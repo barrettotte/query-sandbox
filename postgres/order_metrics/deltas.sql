@@ -18,7 +18,7 @@ order by state_start desc, order_id;
 -- calculate deltas, age, inactivity
 with
 params as (
-  select '2024-05-08 00:00:00'::timestamp without time zone as end_date
+  select '2024-05-10 00:00:00'::timestamp without time zone as end_date
   -- select '2024-05-07 00:00:00'::timestamp without time zone as end_date
   -- select '2024-05-02 12:30:00'::timestamp without time zone as end_date
   -- select '2024-05-02 10:30:00'::timestamp without time zone as end_date
@@ -48,26 +48,26 @@ latest_deltas as (
   group by order_id
 ),
 order_age as (
-  select o.id as order_id, (select end_date from params) - o.created as age, o.created
+  select o.id as order_id, o.created,
+    extract(epoch from ((select end_date from params) - o.created) / (60*60*24)) as age
   from orders as o
   join metrics as m on o.id=m.order_id and m.rn=1
 ),
 data_combined as (
   select o.id as order_id, oa.age, d.is_delta,
-    (select end_date from params) - coalesce(ld.last_state_start, o.created) as inactivity
+    extract(epoch from ((select end_date from params) - coalesce(ld.last_state_start, o.created)) / (60*60*24)) as inactivity
   from orders as o
   join order_age as oa on o.id = oa.order_id
   left join latest_deltas as ld on o.id = ld.order_id
   left join deltas as d on o.id = d.order_id
 )
 select min(age) as min_age,
-  max(age) as max_age, 
-  avg(age) as avg_age,
-  min(inactivity) as min_inactivity,
-  max(inactivity) as max_inactivity,
-  avg(inactivity) as avg_inactivity,
+  round(max(age), 4) as max_age, 
+  round(avg(age), 4) as avg_age,
+  round(min(inactivity), 4) as min_inactivity,
+  round(max(inactivity), 4) as max_inactivity,
+  round(avg(inactivity), 4) as avg_inactivity,
   count(is_delta) as delta_count,
   (select count(distinct order_id) from metrics) as total_count
 from data_combined;
-
 

@@ -1,12 +1,17 @@
 package com.github.barrettotte.querysandbox.store;
 
+import com.github.barrettotte.querysandbox.metrics.*;
+
+import java.util.List;
+import java.util.Map;
+
 public interface OrderMetricsStore {
 
-    void distribution();
+    Map<String, Long> distribution(DistributionSearch search);
 
-    void trends();
+    List<TrendBucket> trends(TrendsSearch search);
 
-    void delta();
+    DeltaResult delta(DateRangeSearch search);
 
     void collect();
 }

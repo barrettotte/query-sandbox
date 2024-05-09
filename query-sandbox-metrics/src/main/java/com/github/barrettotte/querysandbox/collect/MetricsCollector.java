@@ -32,6 +32,6 @@ public class MetricsCollector implements CommandLineRunner {
         };
 
         // schedule metrics collector to run on an interval
-        scheduledExecutor.scheduleAtFixedRate(collectMetrics, 0, 5, TimeUnit.MINUTES);
+        scheduledExecutor.scheduleAtFixedRate(collectMetrics, 5, 5, TimeUnit.MINUTES);
     }
 }
