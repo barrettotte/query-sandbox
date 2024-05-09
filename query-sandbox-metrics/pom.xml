@@ -53,7 +53,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.barrettotte.Metrics</mainClass>
+                            <mainClass>com.github.barrettotte.querysandbox.collect.MetricsApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

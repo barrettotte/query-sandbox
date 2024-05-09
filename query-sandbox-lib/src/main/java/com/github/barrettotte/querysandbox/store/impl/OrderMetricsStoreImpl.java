@@ -46,8 +46,7 @@ public class OrderMetricsStoreImpl implements OrderMetricsStore {
         Timestamp currentDate = Timestamp.from(Instant.now());
 
         // add orders that have not been recorded yet
-        String createdSql = "INSERT (order_id, state_start, state_end, status, category, priority, type, hidden, assignee_ids)\n" +
-                "INTO order_metrics\n" +
+        String createdSql = "INSERT INTO order_metrics (order_id, state_start, state_end, status, category, priority, type, hidden, assignee_ids)\n" +
                 "SELECT o.id, ?, NULL, o.status, o.category, o.priority, o.type, o.hidden, o.assignee_ids\n" +
                 "FROM orders AS o\n" +
                 "WHERE NOT EXISTS (SELECT o.id FROM order_metrics AS m WHERE m.order_id=o.id)";
