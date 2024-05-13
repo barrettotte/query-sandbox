@@ -96,16 +96,6 @@ select count(*) from new_metrics;
 
 
 -- add a new state metric for order that just had its state change recorded
-with new_metrics as (
-  select '2024-05-07 12:00:00'::timestamp without time zone as state_start, null as state_end, o.id, o.status,
-    o.category, o.priority, o.type, o.hidden, o.assignee_ids
-  from orders as o
-  where not exists (
-    select m.order_id
-    from order_metrics as m
-    where m.order_id=o.id and m.state_end is null
-  )
-)
 insert into order_metrics (order_id, state_start, state_end, status, category, priority, type, hidden, assignee_ids)
 select o.id, '2024-05-07 12:00:00'::timestamp without time zone as state_start, null as state_end, o.status, 
   o.category, o.priority, o.type, o.hidden, o.assignee_ids

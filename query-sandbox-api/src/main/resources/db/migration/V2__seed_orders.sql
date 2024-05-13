@@ -42,3 +42,16 @@ select gen_random_uuid() as id,
   false as hidden, 
   array[]::text[] as assignee_ids
 from generate_series(1, 250000) as x(i);
+
+
+-- seed order_metrics
+
+insert into order_metrics (order_id, state_start, state_end, status, category, priority, type, hidden, assignee_ids)
+select o.id, o.created as state_start, null as state_end, o.status, o.category, 
+  o.priority, o.type, o.hidden, o.assignee_ids
+from orders as o
+where not exists (
+  select m.order_id
+  from order_metrics as m
+  where m.order_id=o.id
+);

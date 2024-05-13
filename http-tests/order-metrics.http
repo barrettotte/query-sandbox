@@ -1,0 +1,38 @@
+### Test order metrics API
+
+@base=http://localhost:8080/api/order/metrics
+
+### Status trends
+POST {{base}}/trends HTTP/1.1
+Content-Type: application/json
+
+{
+  "includeHidden": true,
+  "orderType": "BASIC",
+  "startDate": "2024-01-01T20:19:20.770Z",
+  "endDate": "2024-05-13T20:19:20.770Z",
+  "metricType": "STATUS",
+  "bucketSize": "MONTH"
+}
+
+### Status distribution
+POST {{base}}/distribution HTTP/1.1
+Content-Type: application/json
+
+{
+  "includeHidden": true,
+  "orderType": "BASIC",
+  "metricDate": "2024-05-13T20:03:42.373Z",
+  "metricType": "STATUS"
+}
+
+### Status Delta
+POST {{base}}/delta HTTP/1.1
+Content-Type: application/json
+
+{
+  "includeHidden": true,
+  "orderType": "BASIC",
+  "startDate": "2024-01-01T20:20:01.469Z",
+  "endDate": "2024-05-13T20:20:01.469Z"
+}

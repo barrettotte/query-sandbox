@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Instant;
@@ -99,7 +100,7 @@ public class OrderMetricsStoreImpl implements OrderMetricsStore {
         for (Map<String, Object> row : jdbcNamed.queryForList(sql, params)) {
             trendBuckets.add(new TrendBucket(
                     (String) row.get(trendType),
-                    ((Timestamp) row.get("bucket_start")).toInstant(),
+                    ((Timestamp) row.get("bucket_start")).toInstant().truncatedTo(search.getBucketSize().getTruncateTo()),
                     (Long) row.get("bucket_count")
             ));
         }
@@ -160,14 +161,15 @@ public class OrderMetricsStoreImpl implements OrderMetricsStore {
         LOGGER.debug("Fetching deltas {}\nusing parameters {}", sql, params);
 
         DeltaResult deltaResult = new DeltaResult();
-        for (Map<String, Object> row : jdbcNamed.queryForList(sql, params)) {
-            deltaResult.setMinAge((Float) row.get("min_age"));
-            deltaResult.setMinAge((Float) row.get("max_age"));
-            deltaResult.setAverageAge((Float) row.get("avg_age"));
 
-            deltaResult.setMinInactivity((Float) row.get("min_inactivity"));
-            deltaResult.setMaxInactivity((Float) row.get("max_inactivity"));
-            deltaResult.setAverageInactivity((Float) row.get("avg_inactivity"));
+        for (Map<String, Object> row : jdbcNamed.queryForList(sql, params)) {
+            deltaResult.setMinAge(((BigDecimal) row.get("min_age")).floatValue());
+            deltaResult.setMinAge(((BigDecimal) row.get("max_age")).floatValue());
+            deltaResult.setAverageAge(((BigDecimal) row.get("avg_age")).floatValue());
+
+            deltaResult.setMinInactivity(((BigDecimal) row.get("min_inactivity")).floatValue());
+            deltaResult.setMaxInactivity(((BigDecimal) row.get("max_inactivity")).floatValue());
+            deltaResult.setAverageInactivity(((BigDecimal) row.get("avg_inactivity")).floatValue());
 
             deltaResult.setDeltaCount((Long) row.get("delta_count"));
             deltaResult.setTotalCount((Long) row.get("total_count"));
@@ -214,17 +216,7 @@ public class OrderMetricsStoreImpl implements OrderMetricsStore {
         LOGGER.debug("Updated {} order_metrics row(s)", updated);
 
         // add a new state metric for order that just had its state change recorded
-        String nextMetricSql = "WITH new_metrics AS (\n" +
-            "  SELECT :currentDate AS state_start, NULL AS state_end, o.id, o.status,\n" +
-            "    o.category, o.priority, o.type, o.hidden, o.assignee_ids\n" +
-            "  FROM orders AS o\n" +
-            "  WHERE NOT EXISTS (\n" +
-            "    SELECT m.order_id\n" +
-            "    FROM order_metrics AS m\n" +
-            "    WHERE m.order_id=o.id AND m.state_end IS NULL\n" +
-            "  )\n" +
-            ")\n" +
-            "INSERT INTO order_metrics (order_id, state_start, state_end, status,\n" +
+        String nextMetricSql = "INSERT INTO order_metrics (order_id, state_start, state_end, status,\n" +
             "  category, priority, type, hidden, assignee_ids)\n" +
             "SELECT o.id, :currentDate as state_start, NULL AS state_end, o.status,\n" +
             "  o.category, o.priority, o.type, o.hidden, o.assignee_ids\n" +
